@@ -1,33 +1,29 @@
 module.exports = {
   siteMetadata: {
-    title: `Novela by Narative`,
-    name: `Narative`,
+    title: `Mark Brown`,
+    name: `Mark Brown`,
     siteUrl: `https://novela.narative.co`,
     description: `This is my description that will be used in the meta tags and important for search results`,
     hero: {
-      heading: `Welcome to Novela, the simplest way to start publishing with Gatsby.`,
+      heading: `Welcome.`,
       maxWidth: 652,
     },
     social: [
       {
         name: `twitter`,
-        url: `https://twitter.com/narative`,
+        url: `https://twitter.com/marktjbrown`,
       },
       {
         name: `github`,
-        url: `https://github.com/narative`,
+        url: `https://github.com/mtjb`,
       },
       {
         name: `instagram`,
-        url: `https://instagram.com/narative.co`,
+        url: `https://instagram.com/marktjbrown`,
       },
       {
         name: `linkedin`,
-        url: `https://www.linkedin.com/company/narative/`,
-      },
-      {
-        name: `dribbble`,
-        url: `https://dribbble.com/narativestudio`,
+        url: `https://www.linkedin.com/in/mark-brown-9952b4a8/`,
       },
     ],
   },
