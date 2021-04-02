@@ -1,73 +1,121 @@
 ---
-title: Running Microsoft SQL Server.. on a Mac!
+title: Improve query caching with IN clause padding
 author: Mark Brown
 date: 2020-10-06
-hero: ./images/apples.jpeg
-slug: running-microsoft-sql-server-on-a-mac
-excerpt: A few years ago I switched my main work machine from Windows to Mac – despite the reliance I have on SQL Server to run our application (Well, there’s also the dev-only H2 database, but even then I knew that wouldn’t fly due to some of the ‘subtle’ differences).
+hero: ./images/padding.jpeg
+slug: /improve-query-caching-with-in-clause-padding
+excerpt: In my experience, the number one cause of application performance problems is not your application code – it’s your persistence layer. Problems in this area can be caused by many different ‘sins’; Improper entity relationships (think LAZY vs EAGER fetching), Inefficient queries or indeed the cardinal sin – N+1 queries! A lot of the time the application can end up in this way as a result of a lack of awareness of what you are asking the persistence layer to do. Often, you’ll find that simply enabling logging of sql statements will open your eyes to the problem. In fact, when using a data access framework that generates statements on your behalf – it should be mandatory that you inspect the generated statements to ensure both their effectiveness, and their performance.
 ---
 
 ## 👋 Introduction
-A few years ago I switched my main work machine from Windows to Mac – despite the reliance I have on SQL Server to run our application (Well, there’s also the dev-only H2 database, but even then I knew that wouldn’t fly due to some of the ‘subtle’ differences).
+In my experience, the number one cause of application performance problems is not your application code – it’s your persistence layer. Problems in this area can be caused by many different ‘sins’; Improper entity relationships (think LAZY vs EAGER fetching), Inefficient queries or indeed the cardinal sin – N+1 queries! A lot of the time the application can end up in this way as a result of a lack of awareness of what you are asking the persistence layer to do. Often, you’ll find that simply enabling logging of sql statements will open your eyes to the problem. In fact, when using a data access framework that generates statements on your behalf – it should be *mandatory* that you inspect the generated statements to ensure both their effectiveness, and their performance.
 
-<div className="Image__Small">
-  <img
-    src="./images/sql-error.png"
-    title="Empty in clause"
-    alt="f"
-  />
-</div>
+Today we’re going to talk about a simple optimisation trick that comes after you have done all you can do for the query, it’s been carefully developed, tested, and you have given consideration to query optimisation – now what? Well you can enable _IN clause padding_ to get the query cache on your side so that less execution plans will be required for your query.
 
-At the time I had no idea what containerisation was – so i’d thought my only option was to run my database in a Windows VM or use Wine to run SQL Server natively. Thankfully I was then introduced to docker – it allowed me to run my database on the Mac OS side (well, technically within a Linux container), rather than faffing around with a Windows VM, now I can gladly say I only need a Windows VM for one task, and that’s because i’m yet to find a replacement a powerful as SSMS for comparing query plans.
+All code examples in this post are available on my [GitHub](https://github.com/MTJB/blog-code-examples).
 
-## 🐳 Installing Docker
-Installation of docker is pretty straightforward, just follow [the instructions on the docker site](https://docs.docker.com/docker-for-mac/install/). Once complete, the Docker 'whale' icon should be visible in the Mac OS menu bar.
+## 🤨 The Problem
+#### Execution plans
+Execution plans (or query plans) are built by the query optimiser and is an attempt to calculate the most efficient way to process the request (the SQL query). SQL Server has to build an execution plan for each request that it has to execute. The execution plan is build based on several considerations;
 
-<div className="Image__Small">
-  <img
-    src="./images/mac-menu-bar.png"
-    title="Empty in clause"
-    alt="f"
-  />
-</div>
+The tables it needs to join.
+The Indexes to use
+The sub-queries it has to execute.
+How aggregations of `GROUP BY` are calculated.
+The estimated cost and load the operations place on the system.
+Other even more complex considerations.
+Based on combinations of the above, it cannot always be guaranteed that ‘best’ execution plan will be chosen – For example if your query is not making use of correct filtering, the optimiser may decide not to use any indexes to fulfil the query results. Therefore, it is imperative that you are producing carefully considered queries.
 
-## 🏃‍♂️ Pull & Run the SQL Server Docker image
-In a terminal window of your choice (I recommend [iTerm2](https://iterm2.com/)) – run the following;
+SQL has to put a lot of work to build an execution plan, so it caches the execution plan in memory to avoid having to do the same work over and over again.
 
-#### Pull the container image from Docker Hub
-```bash
-sudo docker pull microsoft/mssql-server-linux:2017-latest
+#### The query cache
+SQL Server uses the Query Cache to reuse plans. SQL Server can avoid the overhead of calculating the execution plan for each request and speed up the execution of the queries. The query cache allows SQL Server to reuse Execution Plans for subsequent requests. Within the query cache, additional information is captured, for example the number of times a query has been executed, resources used, etc, so inspecting the contents of the query cache can be a way of diagnosing performance issues in your query statements.
+
+The query cache can be cleared by executing T-SQL commands, but this is not recommended in production code.
+
+#### Default behaviour
+Consider the following entity:
+
+```java
+@Entity
+public class Customer {
+ 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+ 
+    private String firstName;
+ 
+    private String lastName;
+ 
+    // Getters/Setters omitted
+}
 ```
 
-#### Run the image
-```bash
-sudo docker run \
-   -e "ACCEPT_EULA=Y" \
-   -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
-   -p 1433:1433 \
-   --name sql1 \
-   -d microsoft/mssql-server-linux:2017-latest
+Now imagine you want to load multiple `Customer` entities by `id` , so you have written the following query:
+
+```java
+@Query("FROM Customer WHERE id IN :ids")
+Set<Customer> findAllById(@Param("ids") Collection<Long> ids);
 ```
 
-| Parameter | Description |
-|---|---|
-| `-e “ACCEPT_EULA=Y”` | Set ACCEPT_EULA to confirm you accept the [end user licensing agreement](https://go.microsoft.com/fwlink/?LinkId=746388), this is required to start the image. |
-| `-e “SA_PASSWORD=<YourStrong@Passw0rd>”` | Specify your own strong password, again this is required to start the image. |
-| `-p 1433:1433` | Map a port number on the host environment (your machine) to with a TCP port on the container (second number) |
-| `-name sql1` | 	A name for the container. If not specified, a [random one](https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go) will be generated. |
-| `-volume /Users/mark/DockerShare:/HostShare/` | Map a shared folder from the Host OS to the docker container (Very useful for transferring database backups!) |
+When running the follow test cases:
 
-#### Connect to Docker SQL Server with a SQL Editor
-So, you may have guessed by now – but not only will SQL Server not work on Mac OS, but neither will [SQL Server Management Studio](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)! But fear not, Microsoft still has our backs – I have been using [Azure Data Studio](https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver15) to connect to and manage my SQL Server container, and have found it can do (almost) everything I need. To connect, simply input the login credentials specified when running the container.
+```java
+def "Find all by id"(Set<Long> ids) {
+        expect: "Size to be equal"
+            customerRepository.findAllById(ids).size() == ids.size()
+        where:
+            ids                                 | _
+            [1L, 2L]                            | _
+            [2L, 3L]                            | _
+            [3L, 4L, 5L]                        | _
+            [1L, 2L, 3L, 4L, 5L]                | _
+            [4L, 5L, 6L, 7L, 8L, 9L]            | _
+            [4L, 5L, 6L, 7L, 8L, 9L, 10L]       | _
+            [3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L]   | _
+}
+```
 
-<div className="Image__Small">
-  <img
-    src="./images/azure-connection.png"
-    title="Empty in clause"
-    alt="f"
-  />
-</div>
+The following SQL statements are executed by Hibernate:
 
+```java
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ? , ?)
 
-## 💅 Summary
-As you can see – it’s very simple to get an instance of SQL Server running in Docker. Within a few short minutes, you can have the Server up and running – and likewise – replace an existing SQL Server image (if you’re anything like me, replacing the image will be pretty common if you bloat it with unused database backups!).
+```
+
+The query was executed 7 times in total in the test, only 2 of which will be sharing an execution plan as the other 5 queries had a differing number of bind parameters.
+
+## 🧐 Enabling IN clause padding
+If you enable the ‘padding’ property in Hibernate; `hibernate.query.in_clause_parameter_padding`, e.g;
+
+```java
+spring.jpa.properties.hibernate.query.in_clause_parameter_padding=true
+```
+
+And re-running the test cases, the following statements are executed.
+
+```java
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ? , ?)
+select customer0_.id as id1_1_, customer0_.first_name as first_na2_1_, customer0_.last_name as last_nam3_1_ from customer customer0_ where customer0_.id in (? , ? , ? , ? , ? , ? , ? , ?)
+```
+
+This time, only 3 execution plans are required – the statements being executed are using either 2, 4, or 8 bind parameters.
+
+This is possible because Hibernate is now padding parameters to the next power of two. Test cases 4-7 in my example were very deliberately outlined to exaggerate this problem – each of those can now use just one query statement with 8 bind parameters, previously this was 4 separate query statements with [5, 6, 7, 8](https://www.youtube.com/watch?v=4NO-h9PFum4&ab_channel=StepsVEVO) parameters respectively.
+
+## 🔥 Conclusion
+As you can see, this one-liner is an easy way to boost your application’s statement caching potential – free performance gains!
+
+So what’s the downside? Well, JDBC has a limit on the amount of parameters that can be bound – 2100 to be precise – so you need to be careful that rounding does not exceed this. Honestly though, if your queries _do_ bind that many parameters, then you should probably also have a look at those too as that will be another source of performance issues.
