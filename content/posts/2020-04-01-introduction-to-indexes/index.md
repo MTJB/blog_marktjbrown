@@ -1,6 +1,6 @@
 ---
 title: Introduction to Indexes 
-author: Dennis Brotzky
+author: Mark Brown
 date: 2021-04-01
 hero: ./images/hero.jpg
 excerpt: With the growing community interest in Gatsby, we hope to create more resources that make it easier for anyone to grasp the power of this incredible tool.
