@@ -4,7 +4,7 @@ author: Mark Brown
 date: 2021-01-31
 hero: ./images/needle.jpeg
 slug: /hibernate-statistics
-excerpt: In my experience, the number one cause of application performance problems is not your application code – it’s your persistence layer. Problems in this area can be caused by many different ‘sins’; Improper entity relationships (think LAZY vs EAGER fetching), Inefficient queries or indeed the cardinal sin – N+1 queries! A lot of the time the application can end up in this way as a result of a lack of awareness of what you are asking the persistence layer to do. Often, you’ll find that simply enabling logging of sql statements will open your eyes to the problem. In fact, when using a data access framework that generates statements on your behalf – it should be mandatory that you inspect the generated statements to ensure both their effectiveness, and their performance.
+excerpt: Often, you’re may find yourself wondering why application performance has degraded – and almost always that issue originates from your persistence layer. You can interrogate your query statistics in SQL Server using some of the built in (Transact SQL) views – which have been invaluable before to me investigating issues in customer environments.
 ---
 
 ## 👋 Introduction
