@@ -21,10 +21,10 @@ A static site generator is a tool that generates static sites (🤯 - I know), d
 Some of the other benefits of static sites allowed me to make improvements in speed, SEO, and security - without having to do anything! Allowing me to focus on writing posts, instead of pushing pixels about, or attempting to navigate through the maze that was Wordpress.
 
 ## 🙋‍♂️ What if you don't know React or GraphQL - can you still use Gatsby?
-It certainly helps to know more about these to improve about build upon the starter projects - but I still almost nothing, i've had to tweak a few _.js_ files to add dependencies, and I couldn't yet even tell you where the GraphQL code is 😅 - most of my contributions have been in markdown, which I'm fairly comfortable with 🤷‍♂️
+It certainly helps to know more about these to improve and build upon the starter projects - but I still know almost nothing, i've had to tweak a few _.js_ files to add dependencies, and I couldn't yet even tell you where the GraphQL code is 😅 - most of my contributions have been in markdown, which I'm fairly comfortable with 🤷‍♂️
 
 ## 😎 So what are the _real_ reasons I moved to GatsbyJS?
-I'm just a simple, lazy guy - swithching to GatsbyJS looked like it would allow me to create a blog that I liked, importantly with _no_ effort required from myself to learn any more of _the codes_ (at least initially). But also, out of the box it gave me;
+I'm just a simple, lazy guy - switching to GatsbyJS looked like it would allow me to create a blog that I liked, importantly with _no_ effort required from myself to learn any more of _the codes_ (at least initially). But also, out of the box it gave me;
 
 1. Dark-themed code snippets 💯
 1. Dark theme toggle on my entire blog - because everyone knows [light theme is bad for you](https://i.redd.it/oa59qwy5sio21.png).
@@ -46,16 +46,16 @@ private boolean isEven(int number) {
 ```
 
 ## 👨🏻‍🏫 How to create a new GatsbyJS blog
-I use npm alongside the gatsby-cli to manage my dependencies and build my site for testing etc, therefore you will need to ensure you have both installed and running.
+I use `npm` alongside the `gatsby-cli` to manage my dependencies and build my site for testing etc, therefore you will need to ensure you have both installed and running.
 
 #### Getting started with Gatsby Starter Novella
-The theme I use for my blog is built on top of (and pretty entirely from) the [Novella](https://github.com/narative/gatsby-theme-novela) theme, who helpfully provide a starter repo - this can be installed like so;
+The theme I use for my blog is built on top of the [Novella](https://github.com/narative/gatsby-theme-novela) theme, who helpfully provide a starter repo - this can be installed like so;
 
 ```bash
 gatsby new my-site-name https://github.com/narative/gatsby-starter-novela
 ```
 
-That's almost everything, now the final step is to run a local developement server to allow you to make changes to your site;
+That's almost everything(!). Now, the final step is to run a local developement server to allow you to make changes to your site;
 
 ```bash
 gatsby develop
@@ -77,4 +77,4 @@ I chose to host my new site on Gatsby's own hosting solution - Gatsby Cloud, mai
 </div>
 
 ## 💅 Conclusion
-Moving to GatsbyJS, for me, was relatively pain free - I was up and running with a clone of the Novella theme in minutes, and I only had 5 posts within WordPress to move over - so a simply copy and paste job worked for me! With this change, I now have a blog I prefer the look of, and, more importantly one that I find easier and faster to contribute to - at times, I found the WordPress quite heavyweight to add new content to whereas now I can add new posts to my blog just by making a few new files in my repository and pushing it to Git!
+Moving to GatsbyJS, for me, was relatively pain free - I was up and running with a clone of the Novella theme in minutes, and I only had 5 posts within WordPress to move over - so a simple copy and paste job worked for me! With this change, I now have a blog I prefer the look of and more importantly, one that I find easier and faster to contribute to. At times, I found the WordPress quite heavyweight to add new content to whereas now I can add new posts to my blog just by making a few new files in my repository and pushing it to Git!
