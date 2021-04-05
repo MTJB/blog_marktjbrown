@@ -2,8 +2,8 @@ module.exports = {
   siteMetadata: {
     title: `Mark Brown`,
     name: `Mark Brown`,
-    siteUrl: `https://novela.narative.co`,
-    description: `This is my description that will be used in the meta tags and important for search results`,
+    siteUrl: `https://marktjbrown.com`,
+    description: `Hi I’m Mark, a Software Engineer from Belfast and Head of Support in the Brown house, duties mainly involve turning it off and on again.`,
     hero: {
       heading: `Welcome.`,
       maxWidth: 652,
