@@ -28,7 +28,7 @@ I'm just a simple, lazy guy - swithching to GatsbyJS looked like it would allow 
 
 1. Dark-themed code snippets 💯
 1. Dark theme toggle on my entire blog - because everyone knows [light theme is bad for you](https://i.redd.it/oa59qwy5sio21.png).
-1. Ability to write posts in [markdown](https://github.com/MTJB/blog_marktjbrown/blob/master/content/posts/2020-10-06-running-sqlserver-on-mac/index.md) 😌
+1. Ability to write posts in [markdown](https://github.com/MTJB/blog_marktjbrown/blob/master/content/posts/2021-04-05-moving-to-gatsby/index.md) 😌
 1. A nicer-looking site, in my opinion 😍 (but you know what they say about opinions...).
 
 ```java
