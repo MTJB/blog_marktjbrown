@@ -9,7 +9,7 @@ import React from 'react';
  */
 export default function Logo({ fill }) {
   return (
-    <svg fill={fill} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="230px" height="70px" viewBox="0 0 230 170" enable-background="new 0 0 230 170" xmlSpace="preserve"> 
+    <svg fill={fill} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100px" height="70px" viewBox="0 0 230 170" xmlSpace="preserve"> 
     <image id="image0" width="230" height="170" x="0" y="0"
     xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOYAAACqCAMAAACOLsOeAAAABGdBTUEAALGPC/xhBQAAACBjSFJN
                 AAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAPFBMVEUAAAC/JlGvI1LHV3jf
