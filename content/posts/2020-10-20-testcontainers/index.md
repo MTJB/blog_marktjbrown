@@ -82,7 +82,7 @@ class SqlSpec extends Specification {
 }
 ```
 
-Above you can see how I initialise my ApplicationContext, first I manually start the MSSQL container, I then grab the JDBC url in order for me to set the `spring.datasource.url` – and that’s basically it! I have also added a few extras, like reading the database name from a properties file and creating the database with a PreparedStatement, neither of these are required – and in fact you may want to consider disabling `spring.jpa.hibernate.ddl-auto` entirely as [it is not advised to used in production](https://stackoverflow.com/questions/221379/hibernate-hbm2ddl-auto-update-in-production/221422#221422) – instead opting for some other schema management solution, for example [Flyway](https://vladmihalcea.com/flyway-database-schema-migrations/).
+Above you can see how I initialise my ApplicationContext, first I manually start the MSSQL container, I then grab the JDBC url in order for me to set the `spring.datasource.url` – and that’s basically it! I have also added a few extras, like reading the database name from a properties file and creating the database with a PreparedStatement, neither of these are required – and in fact you may want to consider disabling `spring.jpa.hibernate.ddl-auto` entirely as [it is not advised to use in production](https://stackoverflow.com/questions/221379/hibernate-hbm2ddl-auto-update-in-production/221422#221422) – instead opting for some other schema management solution, for example [Flyway](https://vladmihalcea.com/flyway-database-schema-migrations/).
 
 #### Use the test container in a test class
 Now that you have defined an `Initializer`, you can use class inheritance for test execution.
