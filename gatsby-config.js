@@ -5,7 +5,7 @@ module.exports = {
     siteUrl: `https://marktjbrown.com`,
     description: `Hi I’m Mark, a Software Engineer from Belfast and Head of Support in the Brown house, duties mainly involve turning it off and on again.`,
     hero: {
-      heading: `Welcome.`,
+      heading: `Welcome`,
       maxWidth: 652,
     },
     social: [
