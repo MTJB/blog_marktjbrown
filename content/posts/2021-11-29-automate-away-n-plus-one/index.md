@@ -21,7 +21,7 @@ So what is the N+1 problem? Well, I'll divert your attention to one of my earlie
 ## BUT, I could have sworn I fixed this?? 🤨
 See also: _works on my machine_
 
-Entity relationships can be tricky to get _just right_ and just like Goldilocks, you don't want to be sleeping when Papa bear growls "Why is this application so slow??" (or whatever he says).
+Entity relationships can be tricky to get _just right_ and just like Goldilocks, you don't want to be sleeping when Papa bear growls "Why is this application so slow??" (or whatever he says). 🧸
 
 Now the good news is - you can write tests to prove your queries don't suffer the N+1 issue, _and_ don't start to over time - of course, you'll have definitely checked this before pushing it the last time... 👀
 
