@@ -59,30 +59,30 @@ _(Note: how I have given my query the hint to use my Entity Graph - no N+1 here)
 Now put it all together and what do you get?
 ```java
 def "Car.garage entity graph executes one query to load all relationships"(String graphType) {
-        setup: "2 Car garages, with 3 Cars"
-            CarGarage g1 = carGarageService.create(new CarGarageDto(name: "Browns"))
-            CarGarage g2 = carGarageService.create(new CarGarageDto(name: "Smyths"))
-            carService.create(new CarDto(garage: g1, make: "Ford"))
-            carService.create(new CarDto(garage: g2, make: "BMW"))
-        and: "Clear statistics"
-            Session session = entityManager.unwrap(Session.class)
-            Statistics statistics = session.getSessionFactory().getStatistics()
-            statistics.setStatisticsEnabled(true)
-            statistics.clear()
-            assert statistics.getQueryExecutionCount() == 0
-        when: "Fetching all Cars using the Car.garage entity graph"
-            List<Car> cars = entityManager.createQuery("SELECT c FROM Car c")
-                    .setHint(graphType, entityManager.getEntityGraph("Car.garage"))
-                    .getResultList() as List<Car>
-        then: "Only 1 query executed"
-            statistics.getQueryExecutionCount() == 1
-            statistics.getPrepareStatementCount() == 1
-        and: "Both cars returned"
-            cars.size() == 2
-        cleanup:
-            statistics.setStatisticsEnabled(false)
-        where:
-            graphType << ["javax.persistence.loadgraph", "javax.persistence.fetchgraph"]
+    setup: "2 Car garages, with 3 Cars"
+        CarGarage g1 = carGarageService.create(new CarGarageDto(name: "Browns"))
+        CarGarage g2 = carGarageService.create(new CarGarageDto(name: "Smyths"))
+        carService.create(new CarDto(garage: g1, make: "Ford"))
+        carService.create(new CarDto(garage: g2, make: "BMW"))
+    and: "Clear statistics"
+        Session session = entityManager.unwrap(Session.class)
+        Statistics statistics = session.getSessionFactory().getStatistics()
+        statistics.setStatisticsEnabled(true)
+        statistics.clear()
+        assert statistics.getQueryExecutionCount() == 0
+    when: "Fetching all Cars using the Car.garage entity graph"
+        List<Car> cars = entityManager.createQuery("SELECT c FROM Car c")
+                .setHint(graphType, entityManager.getEntityGraph("Car.garage"))
+                .getResultList() as List<Car>
+    then: "Only 1 query executed"
+        statistics.getQueryExecutionCount() == 1
+        statistics.getPrepareStatementCount() == 1
+    and: "Both cars returned"
+        cars.size() == 2
+    cleanup:
+        statistics.setStatisticsEnabled(false)
+    where:
+        graphType << ["javax.persistence.loadgraph", "javax.persistence.fetchgraph"]
     }
 ```
 
