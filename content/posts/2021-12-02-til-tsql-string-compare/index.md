@@ -8,7 +8,7 @@ excerpt:
 ---
 
 ## Summary 📖
-I set off down this path of enlightenment as I investigated a customer issue that "could never happen". I paused briefly to wipe the egg off my face the dug into how it could happen.
+I set off down this path of enlightenment as I investigated a customer issue that "could never happen". I paused briefly to wipe the egg off my face then dug into how it could happen.
 
 To keep my Car Garage analogy flowing, imagine you own a franchise that sells many flavours of car - BMW, Mercedes, and the like. The used car market is booming and you now automate the process of diverting incoming shipments to the right garage - for example you want all Mercedes to go to Garage A, All BMWs to Garage B, and so on (I'm really trying here..).
 
