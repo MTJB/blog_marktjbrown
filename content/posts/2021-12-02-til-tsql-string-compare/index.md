@@ -4,7 +4,7 @@ author: Mark Brown
 date: 2021-12-02
 hero: ./images/hero.png
 slug: /til-tsql-string-compare
-excerpt: 
+excerpt: I set off down this path of enlightenment as I investigated a customer issue that “could never happen”.
 ---
 
 ## Summary 📖
