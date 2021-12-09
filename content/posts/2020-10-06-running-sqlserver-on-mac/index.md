@@ -36,7 +36,7 @@ In a terminal window of your choice (I recommend [iTerm2](https://iterm2.com/)) 
 
 #### Pull the container image from Docker Hub
 ```bash
-sudo docker pull microsoft/mssql-server-linux:2017-latest
+sudo docker pull mcr.microsoft.com/mssql/server:2019-latest
 ```
 
 #### Run the image
@@ -46,7 +46,7 @@ sudo docker run \
    -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
    -p 1433:1433 \
    --name sql1 \
-   -d microsoft/mssql-server-linux:2017-latest
+   -d mcr.microsoft.com/mssql/server:2019-latest
 ```
 
 | Parameter | Description |
@@ -68,6 +68,8 @@ So, you may have guessed by now – but not only will SQL Server not work on Mac
   />
 </div>
 
+## Or, the lazy way
+I have written a quick Python script to install my DB, alongside some useful Stored Procedures I use for monitoring (you should too - but that's a story for another day!) - and this can be found on my [GitHub](https://github.com/MTJB/scripts/blob/main/database/setupDb.py)
 
 ## 💅 Summary
 As you can see – it’s very simple to get an instance of SQL Server running in Docker. Within a few short minutes, you can have the Server up and running – and likewise – replace an existing SQL Server image (if you’re anything like me, replacing the image will be pretty common if you bloat it with unused database backups!).
