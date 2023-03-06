@@ -8,8 +8,8 @@ excerpt: Grouping together tests can help you to parallelize your integration te
 ---
 
 ## Summary 📖
-> Have no fear of perfection - you'll never reach it.</br>
-> _Salvador Dali_
+> Have no fear of perfection - you'll never reach it.
+> _Salvador Dalí_
 
 As a project scales, there will (should) be more tests. In a perfect world, these new tests should not have a noticeable 
 change to the build times of your application. But the world is not perfect, developers are lazy, and after a short time
