@@ -1,16 +1,16 @@
 ---
-title: A Groovy way of tagging tests
+title: Splitting tests using JUnit Tags
 author: Mark Brown
 date: 2023-03-06
-hero: ./images/hero.png
-slug: /groovy-tags
+hero: ./images/title.png
+slug: /spock-tags
 excerpt: Grouping together tests can help you to parallelize your integration tests and make your build times faster.
 ---
 
 ## Summary 📖
-As a project scales, there will (should) be more tests. In a perfect world, these new tests should not have a noticeable 
+As a project scales, there will (should) be more tests and in a perfect world, these new tests should not have a noticeable 
 change to the build times of your application. But the world is not perfect, developers are lazy, and after a short time
-your build times have ballooned. 🎈
+your build times have ballooned 🎈
 
 Common ideology in software circles is the concept of the 
 [testing pyramid](https://martinfowler.com/articles/practical-test-pyramid.html), but if you find yourself working on a 
@@ -20,7 +20,7 @@ rather fitting to how you might feel waiting over 2 hours to get build results. 
 
 It's not feasible to re-implement tens of thousands of tests overnight, so grouping together 
 tests can help you to parallelize your integration tests and make your build times faster 
-(you're gonna need a bigger ~boat~ build box).
+(you're gonna need a bigger build box).
 
 ## Who might find this useful? 🤔
 If any of the below apply to you - you might be in the right place. Don't worry, I won't judge you - nor will I tell you
@@ -61,12 +61,15 @@ public class DivideJunitTests {
 The idea then is that you can scatter these tags across your test suites - and speed up your builds by running each of
 the tags in parallel 💨
 
-And the good news for those who are using a hybrid cocktail Spock _and_ JUnit - the good news is that Spock uses a JUnit
-runner under the hood, and [Spock 2.3](https://spockframework.org/spock/docs/2.3/release_notes.html#_release_notes) introduced
+And the good news for those who are using a hybrid cocktail Spock _and_ JUnit is that Spock uses a JUnit
+runner under the hood. [Spock 2.3](https://spockframework.org/spock/docs/2.3/release_notes.html#_release_notes) introduced
 its own tags which play nicely with the JUnit variant.
 
 ## Code 🧑‍💻
 All the code in this post can be found on my [GitHub](https://github.com/MTJB/example-junit-spock-tags) 🖖
+
+_Disclaimer: it's generally not advised to duplicate all of your tests in both Java and Groovy like these examples - 
+that most likely leads to less than optimal build time, too._
 
 Suppose you have 2 test classes - one in JUnit;
 ```java
@@ -88,7 +91,7 @@ public class DivideJunitTests {
 ```
 
 ..and one in Groovy;
-```groovy
+```java
 import spock.lang.Specification
 import spock.lang.Tag
 
@@ -109,11 +112,8 @@ class DivideSpockTests extends Specification {
 ```
 
 As expected, these can both be ran via Gradle;
-```bash
-./gradlew test
-```
-```bash
-$ ./gradlew test --rerun-tasks
+```java
+$ ./gradlew test
 
 > Task :test
 
@@ -152,15 +152,8 @@ test {
 ```
 
 You can start to filter what tests are being ran;
-```bash
-./gradlew test -DSpock
-```
-
-```bash
-$ ./gradlew test --rerun-tasks -Dgroups=Spock
-
-> Configure project :
-null
+```java
+$ ./gradlew test -Dgroups=Spock
 
 > Task :test
 
@@ -176,5 +169,5 @@ BUILD SUCCESSFUL in 3s
 
 ## ⚡️ Conclusion
 JUnit tags, unsurprisingly, works as expected! If you're like me, and are working on a project with a web of dependencies
-you might fight this harder than it ought to be - and for that I advise some self reflection to see you can figure out why
-you've written such confusing build files (or if you're like me blame that guy who used to work here!).
+you might find this harder than it ought to be - and for that I advise some self-reflection to see ifyou can figure out 
+why you've written such confusing build files (or if you're like me, to curse that guy who used to work here!).
