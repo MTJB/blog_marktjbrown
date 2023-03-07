@@ -84,7 +84,7 @@ public class DivideJunitTests {
     @Tag("Divide")
     @ParameterizedTest
     @CsvSource({"10,10,1", "10,1,10", "4200,10,420"})
-    public void testMultiply(int a, int b, int expected) {
+    public void testDivide(int a, int b, int expected) {
         Assertions.assertEquals(expected, Divide.divide(a, b));
     }
 }
@@ -123,11 +123,11 @@ DivideSpockTests > Test divide > com.mtjb.demo.math.DivideSpockTests.Test divide
 
 DivideSpockTests > Test divide > com.mtjb.demo.math.DivideSpockTests.Test divide [a: 4200, b: 10, expected: 420, #2] PASSED
 
-DivideJunitTests > testMultiply(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testMultiply(int, int, int)[1] PASSED
+DivideJunitTests > testDivide(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testDivide(int, int, int)[1] PASSED
 
-DivideJunitTests > testMultiply(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testMultiply(int, int, int)[2] PASSED
+DivideJunitTests > testDivide(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testDivide(int, int, int)[2] PASSED
 
-DivideJunitTests > testMultiply(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testMultiply(int, int, int)[3] PASSED
+DivideJunitTests > testDivide(int, int, int) > com.mtjb.demo.math.DivideJunitTests.testDivide(int, int, int)[3] PASSED
 
 BUILD SUCCESSFUL in 3s
 5 actionable tasks: 5 executed
