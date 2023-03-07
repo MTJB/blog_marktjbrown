@@ -111,7 +111,7 @@ class DivideSpockTests extends Specification {
 }
 ```
 
-As expected, these can both be ran via Gradle;
+As expected, these can both be run via Gradle;
 ```java
 $ ./gradlew test
 
@@ -169,5 +169,5 @@ BUILD SUCCESSFUL in 3s
 
 ## ⚡️ Conclusion
 JUnit tags, unsurprisingly, works as expected! If you're like me, and are working on a project with a web of dependencies
-you might find this harder than it ought to be - and for that I advise some self-reflection to see ifyou can figure out 
+you might find this harder than it ought to be - and for that I advise some self-reflection to see if you can figure out 
 why you've written such confusing build files (or if you're like me, to curse that guy who used to work here!).
